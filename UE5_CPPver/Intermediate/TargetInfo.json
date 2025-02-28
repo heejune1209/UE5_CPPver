@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "UE5_CPPver",
+			"Path": "..\\Source\\UE5_CPPver.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "UE5_CPPverEditor",
+			"Path": "..\\Source\\UE5_CPPverEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

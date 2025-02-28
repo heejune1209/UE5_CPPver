@@ -1,0 +1,15 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "c:\\unreal projects\\ue5_cppver\\ue5_cppver\\source\\ue5_cppver\\r1actor.cpp",
+        "ProvidedModule": "",
+        "PCH": "c:\\unreal projects\\ue5_cppver\\ue5_cppver\\intermediate\\build\\win64\\x64\\ue5_cppvereditor\\development\\unrealed\\sharedpch.unrealed.project.valapi.cpp20.h.pch",
+        "Includes": [
+            "c:\\unreal projects\\ue5_cppver\\ue5_cppver\\intermediate\\build\\win64\\x64\\unrealeditor\\development\\ue5_cppver\\definitions.ue5_cppver.h",
+            "c:\\unreal projects\\ue5_cppver\\ue5_cppver\\source\\ue5_cppver\\r1actor.h",
+            "c:\\unreal projects\\ue5_cppver\\ue5_cppver\\intermediate\\build\\win64\\unrealeditor\\inc\\ue5_cppver\\uht\\r1actor.generated.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}

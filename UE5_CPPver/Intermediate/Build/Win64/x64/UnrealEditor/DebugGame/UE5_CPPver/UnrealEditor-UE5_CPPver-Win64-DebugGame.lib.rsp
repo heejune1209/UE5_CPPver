@@ -1,0 +1,15 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-UE5_CPPver-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UE5_CPPverEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.Project.NonOptimized.ValApi.Cpp20.h.obj"
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\R1Actor.gen.cpp.obj"
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\UE5_CPPver.init.gen.cpp.obj"
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\R1Actor.cpp.obj"
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\UE5_CPPver.cpp.obj"
+"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\Default.rc2.res"
+/OUT:"C:\Unreal Projects\UE5_CPPver\UE5_CPPver\Intermediate\Build\Win64\x64\UnrealEditor\DebugGame\UE5_CPPver\UnrealEditor-UE5_CPPver-Win64-DebugGame.lib"
