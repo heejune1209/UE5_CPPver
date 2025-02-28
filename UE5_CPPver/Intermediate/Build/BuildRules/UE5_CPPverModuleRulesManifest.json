@@ -1,8 +1,0 @@
-{
-	"SourceFiles": [
-		"C:\\Unreal Projects\\UE5_CPPver\\UE5_CPPver\\Source\\UE5_CPPver\\UE5_CPPver.Build.cs",
-		"C:\\Unreal Projects\\UE5_CPPver\\UE5_CPPver\\Source\\UE5_CPPver.Target.cs",
-		"C:\\Unreal Projects\\UE5_CPPver\\UE5_CPPver\\Source\\UE5_CPPverEditor.Target.cs"
-	],
-	"EngineVersion": "5.4.4"
-}
