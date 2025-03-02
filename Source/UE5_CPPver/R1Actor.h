@@ -7,6 +7,27 @@
 #include "R1Actor.generated.h"
 
 class UR1Object;
+class UStaticMeshComponent;
+
+//벡터의 구성요소
+//struct MyVector
+//{
+//	double x;
+//	double y;
+//	double z;
+//
+//	// 크기
+//	// length,size
+//	// sqrt(x*x, y*y, z*z);
+//
+//	// 방향
+//	// 벡터의 자신의 벡터크기를 나눠주면된다.
+//	// 이것은 크기가 1인 방향을 구하는것이기 때문에 Normalize 벡터(정규화된 벡터)를 구하는 것이다.
+//	// (X / sqrt(Length), y / sqrt(Length), z / sqrt(Length))
+//};
+// 벡터는 크기와 방향을 동시에 가지고있다. 
+// 그리고 크기가 1인 벡터를 단위벡터라고 한다.
+
 UCLASS()
 class UE5_CPPVER_API AR1Actor : public AActor
 {
@@ -24,19 +45,31 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// TObjectPtr은 언리얼에서 제공하는 포인터, 생 포인터를 사용하지말고 이 버전을 좀더 권장함.
+	TObjectPtr<UStaticMeshComponent> Body;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<UStaticMeshComponent> Wing;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<UStaticMeshComponent> Head;
+
+	UPROPERTY(EditAnywhere, Category = Battle)
+	TObjectPtr<class AActor> Target;
 
 	/*UR1Object* obj1;
 	UPROPERTY()
 	UR1Object* obj2;*/
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	// BlueprintReadWrite는 블루프린트 코드에서 getSet 같은 걸 할 수 있느냐이다.
 	// Category = Stat은 category를 Stat으로 하겠다이다. 이렇게 하고 에디터상에서 보면 details에서 
 	// Category밑에 Stat이라고 뜨고 밑에 hp가 있는것을 볼 수 있다.
-	int32 hp = 100;
+	/*int32 hp = 100;
 	UPROPERTY(VisibleAnywhere)
 	int32 mp = 50;
 	UPROPERTY(VisibleAnywhere)
-	int32 Speed = 3.5f;
+	int32 Speed = 3.5f;*/
 
 	// UPROPERTY(VisibleAnywhere) 이런식으로 UPROPERTY에 VisibleAnywhere를 넣어주면
 	// 에디터 상에서 액터의 멤버변수를 볼수 있다. 하지만 수정은 불가능하다.

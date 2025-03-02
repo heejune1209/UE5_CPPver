@@ -2,6 +2,9 @@
 
 
 #include "R1Actor.h"
+#include "R1Object.h"
+#include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AR1Actor::AR1Actor()
@@ -9,6 +12,57 @@ AR1Actor::AR1Actor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// UStaticMeshComponent타입으로 Box라는 이름의 오브젝트를 만들어준다
+	// 이러면 에디터 상에서 StaticMesh로 Box라는 오브젝트가 액터 산하에 만들어진다.
+	//Box = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Box"));
+
+	// 에셋을 C++에서 연결해주는 방법, 보통 에셋같은 경우는 블루 프린트에서 연결해주는게 일반적이다.
+	//ConstructorHelpers::FObjectFinder<UStaticMesh> FindMesh(TEXT("/Script/Engine.StaticMesh'/Game/_Art/LevelPrototyping/Meshes/SM_ChamferCube.SM_ChamferCube'"));
+	// ConstructorHelpers::FObjectFinder는 CDO를 찾는 역할, 즉, 우리가 찾고싶은 타입의 객체를 찾아오는 역할
+	// 그래서 UStaticMesh타입을 넣어줬다
+	// TEXT안에는 우리가 스태틱 메시를 넣어주고싶으니까 스태틱메시가 있는 경로를 넣어줘야한다.
+	// 에디터에서 컨텐츠 브라우저에서 에셋을 ctrl + c하면 경로를 가져올수 있다.
+	// 추가로 ConstructorHelpers::FClassFinder<> 라고 있다. 이 두가지를 많이 사용한다.
+	// ConstructorHelpers::FClassFinder<>는 UCLASS를 찾는 역할.
+	
+	// 매시를 찾았으면 Box에 찾은 메시오브젝트를 적용해달라.
+	/*if (FindMesh.Succeeded())
+	{
+		Box->SetStaticMesh(FindMesh.Object);
+	}*/
+	// 근데 이렇게 코드를 작성하고 에디터를 켜보면 매시가 적용이 안되어있을수 있다.
+	// 그러면 에디터를 껐다가 다시 켜보면 적용이 된다.
+	// 그리고 매시쪽에 리버트 표시가 생길수 있는데 있다는 거는 얘가 기본 상태가 아니라고 인지를 하고 있는 것이다.
+	// 근데 우리가 방금 C++에서 여기다가 이렇게 넣어 놨으면 얘가 사실상 CDO 즉 기본 객체가 이걸로 만들어지는 것이기 때문에 얘가 기본 상태여야 되거든요
+	// 이것도 이슈가 있는거니까 껐다가 다시 켜보면 리버트 버튼이	사라진다.
+
+	// 그리고 추가로 가장 효과적으로 버그가 없는 방법은 그냥 Visual Studio 상에서 키는 게 제일 확실하다.
+
+	//------------------------------------------------------
+	Body = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
+	RootComponent = Body;
+	Body->SetRelativeScale3D(FVector(2, 1, 0.25f));
+
+	Wing = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wing"));
+	Wing->SetupAttachment(Body);
+	Wing->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0, 0, 0));
+	Wing->SetRelativeScale3D(FVector(0.25f, 5, 1));
+	
+	Head = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
+	Head->SetupAttachment(Body);
+	Head->SetRelativeLocationAndRotation(FVector(-55.0f, 0, 0), FRotator(0, 0, 0));
+	Head->SetRelativeScale3D(FVector(0.625f, 0.25f, 1));
+
+	Wing->SetRelativeLocation(FVector(0, 0, 0));
+	Head->SetRelativeLocation(FVector(0, 0, 0));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh> FindMesh(TEXT("/Script/Engine.StaticMesh'/Game/_Art/LevelPrototyping/Meshes/SM_ChamferCube.SM_ChamferCube'"));
+	if (FindMesh.Succeeded())
+	{
+		Body->SetStaticMesh(FindMesh.Object);
+		Wing->SetStaticMesh(FindMesh.Object);
+		Head->SetStaticMesh(FindMesh.Object);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +74,7 @@ void AR1Actor::BeginPlay()
 	/*obj1 = NewObject<UR1Object>();
 	obj2 = NewObject<UR1Object>();*/
 
-	GEngine->ForceGarbageCollection(true);
+	//GEngine->ForceGarbageCollection(true);
 	// 이 코드는 Unreal Engine의 가비지 컬렉션(GC)을 강제로 실행하는 함수입니다.
 	// 즉, 현재 필요하지 않은 객체들을 정리하여 메모리를 회수하는 역할을 합니다.
 	// true : 풀 퍼지(Full Purge) 모드로 실행 → 더 강력한 가비지 컬렉션 수행
@@ -45,6 +99,22 @@ void AR1Actor::BeginPlay()
 	// - Unreal Engine은 자동으로 적절한 타이밍에 GC를 수행함.
 	// - 너무 자주 호출하면 불필요한 성능 저하가 발생할 수 있음.
 
+	// R1Actor가 자기의 타겟을 찾게끔 현재 맵에 있는 특정 액터를 찾고 싶은 기능은 UGameplayStatics 클래스에 많이 있다.
+	//Target = UGameplayStatics::GetActorOfClass(GetWorld(), AR1Actor::StaticClass());
+	// GetActorOfClass : 특정 클래스에 있는 하나의 액터 혹은 모든 액터를 다 갖고 오겠다
+
+	// std::vector
+	
+	TArray<AActor*> Actors;
+
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), TEXT("heejune"), Actors);
+
+	// 사실 STL에서 empty는 사실상 사이즈가 현재 0이냐 라는 개념인데 언리얼에서는 clear와 같은 기능이다.
+	if (Actors.Num() > 0)
+	{
+		// Actors라는 배열의 크기가 0보다 크면 타겟에 Actors의 0번째 인덱스의 데이터를 넣어준다.
+		Target = Actors[0];
+	}
 }
 
 // Called every frame
@@ -72,6 +142,41 @@ void AR1Actor::Tick(float DeltaTime)
 
 	// 즉, 가장 기본적으로 UClass, UProperty 혹은 나중에 가면은 UFunction 해가지고 어떤 함수에다가 얘는 관찰 대상이 되는 함수이다 라는 힌트도 붙일 수 있다. 
 	// 일단 기본적인 아이를 내가 들고 있을거면 무조건 붙인다라고 생각하는것이 더 편리하다.
+
+	// -------------------------
+	// DeltaTime은 이전 프레임에서 현재 프레임까지의 시간을 나타낸다.
+
+	if (Target != nullptr)
+	{
+		// 이동속도
+		float Speed = 50.0f;
+		// 이동거리
+		float distance = DeltaTime * Speed;
+
+		// 현재 위치를 가져온다
+		FVector Location = GetActorLocation();
+
+		FVector DirectionVector = Target->GetActorLocation() - GetActorLocation();
+		DirectionVector.Normalize();
+
+		// 새로운 위치를 설정해준다, 현재위치에 이동거리에 방향을 곱해준것을 더하면 새로운 위치가 나온다.
+		// 참고로 ForwardVector는 X축 방향이다.
+		/*FVector NewLocation = Location + DirectionVector * distance;
+		SetActorLocation(NewLocation);*/
+		// FVector::ForwardVector대신 normalized한 DirectionVector로 대체해도 된다.
+
+		// 이 함수는 바뀐 방향벡터만 받아준다.
+		// 현재 위치는 이 함수가 알아서 할테니 방향벡터만 알려줘라는 뜻.
+		// 그래서 FVector::ForwardVector * distance를 넣어주면 된다.
+		AddActorWorldOffset(DirectionVector * distance);
+
+		// 참고로 World라는 말이 들어가 있거나 GetActorLocation 이렇게 좌표를 가져오는데 별다른 말이 없으면 월드 좌표를 기준.
+
+		// 그래서 로컬 좌표계는 물체를 기준으로 하는 좌표계인거고 월드 좌표계는 항상 고정이고 어떤 방향을 바라보건 어떤 위치에 있건
+		// 좌표계는 축이 고정이다
+
+	}
+	
 }
 
 
