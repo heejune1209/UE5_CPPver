@@ -50,8 +50,8 @@ AR1Actor::AR1Actor()
 	
 	Head = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
 	Head->SetupAttachment(Body);
-	Head->SetRelativeLocationAndRotation(FVector(-55.0f, 0, 0), FRotator(0, 0, 0));
-	Head->SetRelativeScale3D(FVector(0.625f, 0.25f, 1));
+	Head->SetRelativeLocationAndRotation(FVector(30, 0, 0), FRotator(0, 0, 0));
+	Head->SetRelativeScale3D(FVector(0.125f, 0.25f, 1));
 
 	Wing->SetRelativeLocation(FVector(0, 0, 0));
 	Head->SetRelativeLocation(FVector(0, 0, 0));
